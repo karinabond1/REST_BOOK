@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BookShop</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="css/fontawesome.min.css">-->
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">B<i class="far fa-circle" aria-hidden="true"></i><i
+                class="far fa-circle"></i>KS SH<i class="far fa-circle" aria-hidden="true"></i>P </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="../index.php">Home</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="row centered">
+            <div class="col-lg-12" >
+                <div id="hello"></div>
+                <h3>If you want to buy a book, you need to be register or log in!</h3>
+                <div class="col-lg-6">
+                    <h3>Registration!</h3>
+                    <div id="bed_reg" class="bed"></div>
+                    <form class="navbar-form navbar-center" role="search" name="reg_form" id="reg_form">
+                        <div class="form-group">
+                            Name <input type="text" class="form-control" value="" id="name" name="name"
+                                        placeholder="Name" /required><br><br>
+                            Surname <input type="text" class="form-control" value="" id="surname" name="surname"
+                                           placeholder="Surname" /required><br><br>
+                            Email <input type="email" class="form-control" value="" id="email" name="email"
+                                         placeholder="Email" /required><br><br>
+                            Password <input type="password" class="form-control" value="" id="password" name="password"
+                                            placeholder="Password" /required><br><br>
+                            <!--<button type="button" class="btn btn-default" id="btn_search">Search</button>-->
+                            <input type="button" value="Register" class="btn btn-default" id="btn_reg">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-6">
+                    
+                    <h3>Log in!</h3>
+                    <div id="bed_log" class="bed"></div>
+                    <form class="navbar-form navbar-center" role="search" method="get" name="log_form" name="log_form"
+                          id="log_form">
+                        <div class="form-group">
+                            Email <input type="email" class="form-control" value="" id="email_log" name="email_log"
+                                         placeholder="Email" /required><br><br>
+                            Password <input type="password" class="form-control" value="" id="password_log"
+                                            name="password_log" placeholder="Password" /required><br><br>
+                            <!--<button type="button" class="btn btn-default" id="btn_search">Search</button>-->
+                            <input type="button" value="Log in" class="btn btn-default" id="btn_log">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <footer>
+        <div id="f">
+            <div class="container">
+                <div class="row centered">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/login.js"></script>
+    <script type='text/javascript'>
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+<Limit GET POST PUT DELETE>
+order deny,allow
+allow from all
+</Limit>
+RewriteEngine On
+RewriteBase /api/
+RewriteRule (.*) http://192.168.0.15/~user14/REST_BOOK/server/api/$1 [R]
