@@ -13,6 +13,15 @@ body{
     margin-top: 70px;
 }
 
+.red_btn{
+    background-color: #aa2b2b;
+    color: whitesmoke;
+}
+
+.descr {
+    visibility: hidden;
+}
+
 h1,h2,h3,h4,h5,h6{
     font-family: 'Raleway', sans-serif;
     font-weight: 300;

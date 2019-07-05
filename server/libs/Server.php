@@ -24,6 +24,7 @@ class Server
     {
         list($s, $u, $r, $ser, $a, $class, $meth, $par) = explode('/', $this->url, 8);
         //echo $class."...".$meth."!!!".$par."!!!";
+        //echo $this->url;
         //echo $this->method;
         switch ($this->method) {
             case 'GET':
@@ -47,9 +48,11 @@ class Server
     {
         //$_POST['name'];
         //echo $class.".".$method;
+        //echo $method;
         $obj = new $class;
         if (method_exists($obj, $method)) {
-            //echo $par;
+            //echo $_REQUEST['password_log'];
+            //echo "gg";
             if (stristr($par, '/') && (!stristr($par, '.txt') || !stristr($par, '.json') || !stristr($par, '.html') || !stristr($par, '.xml'))) {
                 $arr = explode('/', $par);
                 //echo "f";
@@ -57,9 +60,11 @@ class Server
                 $this->viewer->view($carsRes, '');
             } elseif (stristr($par, '.') && (stristr($par, '.txt') || stristr($par, '.json') || stristr($par, '.html') || stristr($par, '.xml'))) {
                 $arr = explode('/', $par);
+                //echo "f";
                 $carsRes = call_user_func([$obj, $method], $arr[0]);
                 $this->viewer->view($carsRes, $arr[1]);
             } else {
+                //echo "f";
                 $carsRes = call_user_func([$obj, $method], $par);
                 $this->viewer->view($carsRes, $par);
             }

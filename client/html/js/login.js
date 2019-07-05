@@ -59,12 +59,12 @@
         }
         if (valid) {
             //$('#btn_log').attr('type', 'submit');
-            var formDataP = $('#log_form').serialize();
-            console.log(formDataP);
+            var formData = $('#log_form').serializeArray();
+            console.log(formData);
             request = $.ajax({
-                url: "http://192.168.0.15/~user14/REST_BOOK/client/api/user/userLog/",
+                url: "http://192.168.0.15/~user14/REST_BOOK/server/api/user/userLog/?email_log="+$('#email_log').val()+"&password_log="+$('#password_log').val(),
                 type: "put",
-                data: formDataP
+                data: formData
             });
 
             // Callback handler that will be called on success
@@ -78,10 +78,16 @@
                         sessionStorage.setItem("name", data[i]["name"]);
                         sessionStorage.setItem("surname", data[i]["surname"]);
                     }*/
-                if(response){
-                    $('#email_log').val("");
-                    $('#password_log').val("");
-                    document.getElementById("bed_log").innerHTML = response;
+                $('#email_log').val("");
+                $('#password_log').val("");
+                var data = JSON.parse(response);
+                console.log(data);
+                if(!Array.isArray(data)){                    
+                    document.getElementById("bed_log").innerHTML = data;
+                }else{
+                    document.getElementById("bed_log").innerHTML = "Hello, "+data[0]['name']+" "+data[0]['surname']+"!";
+                    sessionStorage.setItem("user", data[0]["id"]);
+                    sessionStorage.setItem("status", "online");
                 }
                 console.log("Hooray, it worked!");
                 console.log(response);

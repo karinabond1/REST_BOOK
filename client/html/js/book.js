@@ -1,7 +1,44 @@
 (function ($) {
 
+    
     var str = window.location.search;
     var strArray = str.split('=');
+    $('#btn_buy').click(function () {
+        if(sessionStorage.getItem("user")!=0 && sessionStorage.getItem("status")=='online'){
+            $('input[type=text]#user_id').val(sessionStorage.getItem("user"));
+            $('input[type=text]#book_id').val(strArray[1]);
+            var formData = $('#buy_form').serialize();
+            console.log(formData);
+            request = $.ajax({
+                url: "http://192.168.0.15/~user14/REST_BOOK/server/api/shop/buy/",
+                type: "post",
+                data: formData
+            });
+    
+            // Callback handler that will be called on success
+            request.done(function (response, textStatus, jqXHR) {
+                $('#amount').val("");
+                var data = JSON.parse(response);               
+                document.getElementById("res_buy").innerHTML = data;
+                console.log("Hooray, it worked!");
+                console.log(response);
+    
+                console.log(textStatus);
+                console.log(jqXHR);
+            });
+            request.fail(function (jqXHR, textStatus, errorThrown) {
+                // Log the error to the console
+                console.error(
+                    "The following error occurred: " +
+                    textStatus, errorThrown
+                );
+            });
+        }else{
+            alert("Please, log in!.");
+        }
+        
+    });
+
     /*$('input[type=text]#id_hidden').val(sessionStorage.getItem("id"));
     $('input[type=text]#car_id').val(strArray[1]);
     $('#btn_buy').click(function () {

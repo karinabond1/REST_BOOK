@@ -20,9 +20,18 @@ class User extends Server
         return $this->response('Data not found', 404);
     }
 
-    public function putUserLog()
+    public function putUserLog($email=false,$password=false)
     {
-        $userLog = $this->sql->putUserLog($_REQUEST['email_log'],$_REQUEST['password_log']);
+        $userLog = $this->sql->putUserLog($email, $password);
+        if($userLog){
+            return $this->response($userLog, 200);
+        }
+        return $this->response('Data not found', 404);
+    }
+
+    public function putUserLogOff($id=false)
+    {
+        $userLog = $this->sql->putUserLogOff($id);
         if($userLog){
             return $this->response($userLog, 200);
         }

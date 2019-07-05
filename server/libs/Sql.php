@@ -174,8 +174,10 @@ class Sql
                 $parU[] = $email;
                 $idUser->execute($parU);
                 while($row = $idUser->fetchAll(PDO::FETCH_ASSOC)){
-                    $id = $row['id'];
+                    //var_dump($row);
+                    $id = $row[0]['id'];
                 }
+                //echo $id;
                 if($id){
                     $insertRole = $this->mysql->prepare("INSERT INTO users_roles (user_id,role_id) VALUES(?,?)");
                     $parR[] = $id;
@@ -193,24 +195,154 @@ class Sql
         }
     }
 
-    public function putUserLog($email,$password)
+    public function putUserLog($email, $password)
     {
-        $user = array();
-        //$sendCarInfo = $this->mysql->prepare("SELECT id, name, surname FROM users WHERE email='" . $email . "' AND password='" . $password . "';");
-        $sendCarInfo = $this->mysql->prepare("UPDATE users SET status='online' WHERE email=? AND password=?;");
-        //$par[] = 'online';
-        $par[] = $email;
-        $par[] = $password;
-        $res = $sendCarInfo->execute($par);
-        /*$indexCars = 0;
-        while ($row = $sendCarInfo->fetch(PDO::FETCH_ASSOC)) {
-            $user[$indexCars] = $row;
-            $indexCars++;
-        }*/
-        if ($res) {
-            return "Hello!";
+        //echo "ff";
+        //echo $_SERVER['HTTP_REFERER'];
+        if(!$email && !$password){
+            $url = $_SERVER['HTTP_REFERER'];
+            $arr = explode('?', $url);
+            $arr1 = explode('&', $arr[1]);
+            $emailArr = explode('=', $arr1[0]);
+            $passwordArr = explode('=', $arr1[1]);
+            $email = str_replace("%40","@",$emailArr[1]);
+            $password = $passwordArr[1];
+            //echo $passwordArr[1];
+        }
+        //echo $email;
+        $arr1 = explode('&', $email);
+        $emailArr = explode('=', $arr1[0]);
+        $passwordArr = explode('=', $arr1[1]);
+        $emailRes = str_replace("%40","@",$emailArr[1]);
+        $passwordRes = $passwordArr[1];
+        $updateUser = $this->mysql->prepare("UPDATE users SET status='online' WHERE email=? AND password=?;");
+        $par[] = $emailRes;
+        $par[] = $passwordRes;
+        $res = $updateUser->execute($par);
+        $selectUser = $this->mysql->prepare("SELECT id, name, surname FROM users WHERE email=? AND password=?;");
+        $parS[] = $emailRes;
+        $parS[] = $passwordRes;
+        $selectUser->execute($parS);
+        $indexSelectUser = 0;
+        while ($row = $selectUser->fetch(PDO::FETCH_ASSOC)) {
+            $user[$indexSelectUser] = $row;
+            $indexSelectUser++;
+        }
+        if ($user) {
+            return $user;
         } else {
-            return "There is some problem with buying proccess. Please, try again later!";
+            return "There is some problem with log in proccess. Please, try again!";
+        }
+    }
+
+    public function putUserLogOff($id)
+    {
+        //echo $_SERVER['HTTP_REFERER'];
+        if(!$id){
+            $url = $_SERVER['HTTP_REFERER'];
+            $arr = explode('?', $url);
+            $idArr = explode('=', $arr[1]);
+            echo $arr[1];
+            $id = $idArr[1];
+        }
+        //echo $id;
+        $idArr = explode('=', $id);
+        $idLast = $idArr[1];
+        //echo $idLast;
+        $updateUser = $this->mysql->prepare("UPDATE users SET status='offline' WHERE id=?;");
+        $par[] = $idLast;
+        $res = $updateUser->execute($par);
+        
+        if ($res) {
+            return "Good Bye!";
+        } else {
+            return "There is some problem with log out proccess. Please, try again!";
+        }
+    }
+
+    public function postBuy($user_id,$book_id,$amount)
+    {
+        //echo "dd";
+        $selectCartId = $this->mysql->prepare("SELECT id FROM cart WHERE user_id=?;");
+        $parE[] = $user_id;
+        $selectCartId->execute($parE);
+        if(count($selectCartId->fetchAll(PDO::FETCH_ASSOC))>0) {
+            $indexSelectCartId = 0;
+            $cart_id = 0;
+            $selectCartId2 = $this->mysql->prepare("SELECT id FROM cart WHERE user_id=?;");
+            $parEE[] = $user_id;
+            $selectCartId2->execute($parEE);
+            while ($row = $selectCartId2->fetch(PDO::FETCH_ASSOC)) {
+                //echo "ff";
+                //echo $row['id'];
+                //var_dump($row);
+                $cart_id = $row['id'];
+                $indexSelectCartId++;
+            }
+            $insertBookCart = $this->mysql->prepare("INSERT INTO books_cart (book_id,cart_id,amount) VALUES(?,?,?);");
+            $parB[] = $book_id;
+            $parB[] = $cart_id;
+            $parB[] = $amount;
+            $res = $insertBookCart->execute($parB);
+            if($res){
+                return "Your order in the cart!!";
+            }else{
+                return "Something went wrong! Please, try again!!";
+            }
+        }else{
+            $insertCart = $this->mysql->prepare("INSERT INTO cart (user_id) VALUES(?);");
+            $par[] = $user_id;
+            $res = $insertCart->execute($par);
+
+            $selectCartId1 = $this->mysql->prepare("SELECT id FROM cart WHERE user_id=?");
+            $parC[] = $user_id;
+            $selectCartId1->execute($parC);
+            $indexSelectCartId1 = 0;
+            while ($row = $selectCartId1->fetch(PDO::FETCH_ASSOC)) {
+                $cart_id = $row[0]['id'];
+                $indexSelectCartId1++;
+            }
+
+            $insertBookCart1 = $this->mysql->prepare("INSERT INTO books_cart (book_id,cart_id,amount) VALUES(?,?,?);");
+            $parBo[] = $book_id;
+            $parBo[] = $cart_id;
+            $parBo[] = $amount;
+            $resI = $insertBookCart1->execute($parBo);
+            if($resI){
+                return "Your order in the cart!";
+            }else{
+                return "Something went wrong! Please, try again!";
+            }
+        }
+    }
+
+    public function getCart($id)
+    {
+        $cart_id = 0;
+        $selectIdCart = $this->mysql->prepare("SELECT id FROM cart WHERE user_id=?");
+        $par[] = $id;
+        $selectIdCart->execute($par);
+        $indexIdCart = 0;
+        while ($row = $selectIdCart->fetch(PDO::FETCH_ASSOC)) {
+            $cart_id = $row['id'];
+            $indexIdCart++;
+        }
+        if($cart_id>0){
+            $selectIdBook = $this->mysql->prepare("SELECT books.id, books.book, books.price, books.discount, books_cart.amount FROM books INNER JOIN books_cart ON books.id=books_cart.book_id WHERE books_cart.cart_id=?;");
+            $parB[] = $cart_id;
+            $selectIdBook->execute($parB);
+            $indexIdBook = 0;
+            while ($row = $selectIdBook->fetch(PDO::FETCH_ASSOC)) {
+                $books[$indexIdBook] = $row;
+                $indexIdBook++;
+            }
+            if($books){
+                return $books;
+            }else{
+                return "There are some problems. Please, try again!";
+            }
+        }else{
+            return "There are some problems. Please, try again!";
         }
     }
 }

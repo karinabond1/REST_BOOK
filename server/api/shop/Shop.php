@@ -57,21 +57,23 @@ class Shop extends Server
         return $this->response('Data not found', 404);
     }
 
-    /*public function getSearchResult($arr)
-    {
-        $info = $this->sql->getSearchResult($arr[0],$arr[1],$arr[2],$arr[3],$arr[4],$arr[5],$arr[6],$arr[7]);
-        if($info){
-            return $this->response($info, 200);
-        }
-        return $this->response('Data not found', 404);
-    }
-
     public function postBuy()
     {
-        $postBuy = $this->sql->postBuy($_REQUEST['car_id'],$_REQUEST['user_id'],$_REQUEST['payment']);
+        $postBuy = $this->sql->postBuy($_REQUEST['user_id'],$_REQUEST['book_id'],$_REQUEST['amount']);
         if($postBuy){
             return $this->response($postBuy, 200);
         }
         return $this->response('Data not found', 404);
-    }*/
+    }
+
+    public function getCart($arr)
+    {
+        $books = $this->sql->getCart($arr[0]);
+        if($books){
+            return $this->response($books, 200);
+        }
+        return $this->response('Data not found', 404);
+    }
+
+    
 }
